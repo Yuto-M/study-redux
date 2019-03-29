@@ -1,66 +1,43 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Markdown from './component/markdown';
-import TemplatureConversion from './component/templature-conversion';
-import FilterableProductTable from "./component/filterable-product-table";
+import { createStore } from "redux";
 
-
-if (document.getElementById('markdown')) {
-    ReactDOM.render(
-        <Markdown />,
-        document.getElementById('markdown')
-    );
+/**
+ * This is a reducer, a pure function with (state, action) => state signature.
+ * It describes how an action transforms the state into the next state.
+ *
+ * The shape of the state is up to you: it can be a primitive, an array, an object,
+ * or even an Immutable.js data structure. The only important part is that you should
+ * not mutate the state object, but return a new object if the state changes.
+ *
+ * In this example, we use a `switch` statement and strings, but you can use a helper that
+ * follows a different convention (such as function maps) if it makes sense for your
+ * project.
+ */
+function counter(state = 0, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + 1;
+    case "DECREMENT":
+      return state - 1;
+    default:
+      return state;
+  }
 }
 
-if (document.getElementById('templature-conversion')) {
-    ReactDOM.render(
-        <TemplatureConversion />,
-        document.getElementById('templature-conversion')
-    );
-}
+// Create a Redux store holding the state of your app.
+// Its API is { subscribe, dispatch, getState }.
+let store = createStore(counter);
 
-if (document.getElementById('filterable-product-table')) {
-    const PRODUCTS = [
-      {
-        category: "Sporting Goods",
-        price: "$49.99",
-        stocked: true,
-        name: "Football"
-      },
-      {
-        category: "Sporting Goods",
-        price: "$9.99",
-        stocked: true,
-        name: "Baseball"
-      },
-      {
-        category: "Sporting Goods",
-        price: "$29.99",
-        stocked: false,
-        name: "Basketball"
-      },
-      {
-        category: "Electronics",
-        price: "$99.99",
-        stocked: true,
-        name: "iPod Touch"
-      },
-      {
-        category: "Electronics",
-        price: "$399.99",
-        stocked: false,
-        name: "iPhone 5"
-      },
-      {
-        category: "Electronics",
-        price: "$199.99",
-        stocked: true,
-        name: "Nexus 7"
-      }
-    ];
+// You can use subscribe() to update the UI in response to state changes.
+// Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
+// However it can also be handy to persist the current state in the localStorage.
 
-    ReactDOM.render(
-        <FilterableProductTable products={PRODUCTS} />,
-        document.getElementById('filterable-product-table')
-    );
-}
+store.subscribe(() => console.log(store.getState()));
+
+// The only way to mutate the internal state is to dispatch an action.
+// The actions can be serialized, logged or stored and later replayed.
+store.dispatch({ type: "INCREMENT" });
+// 1
+store.dispatch({ type: "INCREMENT" });
+// 2
+store.dispatch({ type: "DECREMENT" });
+// 1

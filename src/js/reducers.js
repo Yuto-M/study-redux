@@ -3,8 +3,11 @@ import {
   ADD_TODO,
   TOGGLE_TODO,
   SET_VISIBILITY_FILTER,
+} from "./actionTypes.js";
+import {
   VisibilityFilters
-} from "./actions";
+} from './actions.js';
+
 const { SHOW_ALL } = VisibilityFilters;
 
 function visibilityFilter(state = SHOW_ALL, action) {
